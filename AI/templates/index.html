@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bi0Print-AI</title>
+    <style>
+        body {
+            background-color: #0d1117;
+            color: #33ff33;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+        }
+        h1, h2 {
+            text-shadow: 0 0 5px #33ff33, 0 0 10px #00ff00;
+        }
+        .upload-box {
+            border: 2px solid #33ff33;
+            padding: 20px;
+            display: inline-block;
+        }
+        button {
+            background-color: #33ff33;
+            color: black;
+            font-weight: bold;
+            border-radius: 10px;
+            border: 2px solid #00ff00;
+            padding: 10px;
+            cursor: pointer;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Bi0Print-AI</h1>
+    <h2>Upload fingerprint images to predict the blood type</h2>
+
+    <div class="upload-box">
+        <input type="file" id="fileInput" multiple>  <!-- MULTIPLE FILES -->
+        <button onclick="uploadImages()">Predict</button>
+    </div>
+
+    <div class="result" id="result"></div>
+
+    <script>
+        function uploadImages() {
+            let fileInput = document.getElementById("fileInput");
+            let formData = new FormData();
+    
+            for (let i = 0; i < fileInput.files.length; i++) {
+                formData.append("files", fileInput.files[i]);
+            }
+    
+            fetch("/predict", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = "/result";  // No long URLs, use session instead
+                } else {
+                    document.getElementById("result").innerHTML = "<p style='color:red;'>Upload failed</p>";
+                }
+            })
+            .catch(error => console.error("Error:", error));
+        }
+    </script>
+    
+</body>
+</html>

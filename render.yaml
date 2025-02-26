@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: bi0print-ai
+    env: python
+    buildCommand: pip install -r AI/requirements.txt
+    startCommand: cd AI && python app.py
+    envVars:
+      - key: PORT
+        value: 10000
